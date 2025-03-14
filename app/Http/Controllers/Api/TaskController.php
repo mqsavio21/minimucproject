@@ -24,19 +24,13 @@ class TaskController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'due_date' => 'required|date',
-            'status' => 'required|in:pending,in_progress,completed',
-            'employee_id' => 'required|exists:employees,id'
+        $validated = $request->validate([
+            'employees_id' => 'required|exists:employees,id',
+            'task_name' => 'required|string',
+            'due_date' => 'required|date'
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $task = Task::create($validator->validated());
+        $task = Task::create($validated);
         return response()->json($task, 201);
     }
 

@@ -15,8 +15,12 @@ class EmployeeController extends Controller
      */
     public function index(): JsonResponse
     {
-        $employees = Employee::with('tasks')->get();
-        return response()->json($employees);
+        try {
+            $employees = Employee::with('tasks')->get();
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -24,17 +28,13 @@ class EmployeeController extends Controller
      */
     public function store(Request $request): JsonResponse
     {
-        $validator = Validator::make($request->all(), [
+        $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:employees,email',
-            'position' => 'nullable|string|max:255'
+            'email' => 'required|email|unique:employees',
+            'position' => 'nullable|string|max:255',
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        $employee = Employee::create($validator->validated());
+        $employee = Employee::create($validated);
         return response()->json($employee, 201);
     }
 
