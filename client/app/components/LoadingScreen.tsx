@@ -78,13 +78,14 @@ export default function LoadingScreen() {
           background: linear-gradient(
             225deg,
             #0a1832,
-            #0d1f40,
             #102950,
-            #0d1f40,
-            #0a1832
+            #1a365d,
+            #4a3c17,
+            #665518,
+            #8B7355
           );
-          background-size: 400% 400%;
-          animation: gradient 15s ease infinite;
+          background-size: 300% 300%;
+          animation: gradient 12s ease infinite;
         }
 
         @keyframes gradient {
@@ -119,6 +120,27 @@ export default function LoadingScreen() {
           50% {
             opacity: 1;
             transform: translateY(-5px);
+          }
+        }
+
+        /* Add shimmer effect to the loading text */
+        h2 {
+          background: linear-gradient(
+            90deg, 
+            rgba(255,255,255,0.8) 0%, 
+            rgba(255,255,255,1) 50%, 
+            rgba(255,255,255,0.8) 100%
+          );
+          background-size: 200% auto;
+          color: transparent;
+          -webkit-background-clip: text;
+          background-clip: text;
+          animation: shimmer 3s linear infinite;
+        }
+
+        @keyframes shimmer {
+          to {
+            background-position: 200% center;
           }
         }
       `}</style>
